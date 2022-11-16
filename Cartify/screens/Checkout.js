@@ -1,5 +1,12 @@
 import React from 'react';
-import {Image, Text, View, ScrollView, TouchableOpacity} from 'react-native';
+import {
+  Image,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Pressable,
+} from 'react-native';
 
 import Receipt from '../components/Receipt';
 import ItemSummary from '../components/ItemSummary';
@@ -8,17 +15,17 @@ import Styles from '../styles/styles.js';
 
 import Return from '../assets/return.png';
 
-const ReceiptDetails = ({navigation, route}) => {
+const Checkout = ({navigation, route}) => {
   return (
     <View style={[Styles.containerUncenter, Styles.bgColorWhite]}>
       <View style={Styles.returnButton}>
-        <TouchableOpacity onPress={() => navigation.navigate('Receipts')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
           <Image source={Return} />
         </TouchableOpacity>
       </View>
       <Text
         style={[Styles.textBig, Styles.textColorPurple, Styles.paddingLeft30]}>
-        Receipt
+        Checkout
       </Text>
       <ScrollView style={Styles.marginBottom30}>
         {/* Header */}
@@ -48,6 +55,12 @@ const ReceiptDetails = ({navigation, route}) => {
         <ItemSummary />
         <ItemSummary />
         <ItemSummary />
+        <ItemSummary />
+        <ItemSummary />
+        <ItemSummary />
+        <ItemSummary />
+        <ItemSummary />
+        <ItemSummary />
         <View style={[Styles.horizontalLine, Styles.marginHorizontal30]} />
         <PriceSummary
           priceName={'Subtotal:'}
@@ -62,16 +75,35 @@ const ReceiptDetails = ({navigation, route}) => {
             (Styles.textColorBlack, {fontWeight: '700', fontSize: 16})
           }
         />
-        <PriceSummary priceName={'Cash:'} />
-        <PriceSummary priceName={'Change Due:'} />
-        <PriceSummary priceName={'Items Purchased:'} />
-        <PriceSummary priceName={'Vatable Sale:'} />
-        <PriceSummary priceName={'VAT(12%)'} />
-        <PriceSummary priceName={'VAT Exempt Sale:'} />
-        <PriceSummary priceName={'Zero Rated Sale:'} />
       </ScrollView>
+      <View style={[Styles.bgColorPurple, Styles.summary]}>
+        <View
+          style={{
+            position: 'absolute',
+            height: 30,
+            top: 24,
+            left: 24,
+            borderRadius: 10,
+
+            paddingHorizontal: 24,
+            paddingVertical: 4,
+          }}>
+          <Text style={[Styles.textBig, Styles.textColorWhite, {height: 25}]}>
+            X166712
+          </Text>
+        </View>
+
+        <Pressable
+          style={[Styles.checkout, Styles.bgColorWhite]}
+          onPress={() => navigation.navigate('Checkout')}>
+          <Text style={{color: '#656ACC', fontSize: 16, fontWeight: '700'}}>
+            {' '}
+            Refresh Code{' '}
+          </Text>
+        </Pressable>
+      </View>
     </View>
   );
 };
 
-export default ReceiptDetails;
+export default Checkout;

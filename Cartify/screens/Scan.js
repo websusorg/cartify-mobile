@@ -2,27 +2,29 @@ import React, {Component} from 'react';
 import {RNCamera} from 'react-native-camera';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import Styles from '../styles/styles.js';
-import {TouchableOpacity, Text, StatusBar, Linking, View} from 'react-native';
+import {TouchableOpacity, Text, View, Image} from 'react-native';
 
-const Scan = prop => {
-  onSuccess = e => {
-    Linking.openURL(e.data).catch(err =>
-      console.error('An error occured', err),
-    );
-  };
+import Return from '../assets/return.png';
+
+const Scan = ({navigation, route}) => {
+  // onSuccess = e => {
+  //   Linking.openURL(e.data).catch(err =>
+  //     console.error('An error occured', err),
+  //   );
+  // };
 
   return (
     <View>
+      <View style={Styles.returnButton}>
+        <TouchableOpacity onPress={() => navigation.navigate('Receipts')}>
+          <Image source={Return} />
+        </TouchableOpacity>
+      </View>
       <QRCodeScanner
-        style={[Styles.containerUncenter, Styles.bgColorWhite]}
-        onRead={this.onSuccess}
+        // onRead={this.onSuccess}
         flashMode={RNCamera.Constants.FlashMode.torch}
         topContent={
-          <Text style={Styles.centerText}>
-            Go to{' '}
-            <Text style={Styles.textBold}>wikipedia.org/wiki/QR_code</Text> on
-            your computer and scan the QR code.
-          </Text>
+          <Text style={Styles.centerText}>Scans product's qrcode</Text>
         }
         bottomContent={
           <TouchableOpacity style={Styles.buttonTouchable}>

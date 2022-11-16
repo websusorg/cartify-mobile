@@ -11,6 +11,8 @@ import {
 import Item from '../components/Item';
 import Styles from '../styles/styles.js';
 import DeleteItemNotice from '../components/DeleteItemNotice';
+import Navigation from '../components/Navigation';
+import Head from '../components/Head';
 
 import addItem from '../assets/addItem.png';
 import add from '../assets/add.png';
@@ -65,8 +67,19 @@ const Cart = ({navigation, route}) => {
   const HideNotice = () => {
     setIsDelete(false);
   };
+
+  const NavigateToCart = () => {
+    navigation.navigate('Cart');
+  };
+
+  const NavigateToReceipts = () => {
+    navigation.navigate('Receipts');
+  };
+
   return (
     <View style={[Styles.containerUncenter, Styles.bgColorWhite]}>
+      <Head />
+
       {isDelete ? (
         <DeleteItemNotice
           onNo={HideNotice}
@@ -75,7 +88,7 @@ const Cart = ({navigation, route}) => {
       ) : null}
 
       {itemList.length ? (
-        <View style={Styles.height100}>
+        <View style={Styles.containerUncenter}>
           <ScrollView
             style={[Styles.containerFlex, Styles.marginBottom10]}
             keyboardShouldPersistTaps="handled">
@@ -100,14 +113,16 @@ const Cart = ({navigation, route}) => {
           <View style={[Styles.bgColorLightPurple, Styles.summary]}>
             <View style={[Styles.marginHorizontal20, Styles.marginVertical10]}>
               <Text style={Styles.textNormal}>Total</Text>
-              <Text style={[Styles.textSuperBig, Styles.marginTop10]}>
+              <Text style={Styles.textSuperBig}>
                 {itemList.reduce((total, current) => {
                   return (total = total + current.total);
                 }, 0)}
               </Text>
             </View>
 
-            <Pressable style={[Styles.checkout, Styles.bgColorWhite]}>
+            <Pressable
+              style={[Styles.checkout, Styles.bgColorWhite]}
+              onPress={() => navigation.navigate('Checkout')}>
               <Text style={{color: '#656ACC', fontSize: 16, fontWeight: '700'}}>
                 {' '}
                 Checkout{' '}
@@ -123,7 +138,7 @@ const Cart = ({navigation, route}) => {
 
       {!itemList.length ? (
         <View style={Styles.containerCenter}>
-          <TouchableOpacity onPress={OpenCamera} style={Styles.contentCenter}>
+          <TouchableOpacity onPress={AddItem} style={Styles.contentCenter}>
             <Image source={addItem}></Image>
 
             <Text style={[Styles.textNormal, Styles.marginVertical10]}>
@@ -134,6 +149,12 @@ const Cart = ({navigation, route}) => {
           </TouchableOpacity>
         </View>
       ) : null}
+      <Navigation
+        nav1={'Cart'}
+        onPress1={NavigateToCart}
+        nav2={'Receipt'}
+        onPress2={NavigateToReceipts}
+      />
     </View>
   );
 };

@@ -202,14 +202,14 @@ export default StyleSheet.create({
   },
 
   summary: {
-    height: 170,
+    height: 80,
     borderRadius: 20,
   },
 
   checkout: {
     position: 'absolute',
     height: 30,
-    top: 32,
+    top: 24,
     right: 24,
     borderRadius: 10,
 
@@ -231,14 +231,11 @@ export default StyleSheet.create({
   nav: {
     backgroundColor: '#656ACC',
     flexDirection: 'row',
-    position: 'absolute',
-    bottom: 0,
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '100%',
     height: 80,
     borderRadius: 20,
-    zIndex: -10,
   },
 
   noticeBox: {
@@ -249,7 +246,7 @@ export default StyleSheet.create({
 
   returnButton: {
     flexDirection: 'row-reverse',
-    paddingVertical: 10,
+    paddingTop: 30,
     paddingHorizontal: 30,
   },
 
@@ -258,5 +255,23 @@ export default StyleSheet.create({
   horizontalLine: {
     borderBottomColor: 'black',
     borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  // Camera styles
+  centerText: {
+    flex: 1,
+    fontSize: 18,
+    padding: 32,
+    color: '#777',
+  },
+  textBold: {
+    fontWeight: '500',
+    color: '#000',
+  },
+  buttonText: {
+    fontSize: 21,
+    color: 'rgb(0,122,255)',
+  },
+  buttonTouchable: {
+    padding: 16,
   },
 });

@@ -3,6 +3,8 @@ import {Image, Text, View, ScrollView, TouchableOpacity} from 'react-native';
 
 import Receipt from '../components/Receipt';
 import Styles from '../styles/styles.js';
+import Navigation from '../components/Navigation';
+import Head from '../components/Head';
 
 import noReciept from '../assets/noReciept.png';
 
@@ -15,16 +17,30 @@ const Receipts = ({navigation, route}) => {
     {date: '09 / 22 / 22', refno: 98009890, price: 200},
     {date: '09 / 22 / 22', refno: 98009890, price: 200},
   ];
-  const [receiptList, setReceiptList] = useState(initialData);
+  const [receiptList, setReceiptList] = useState([]);
+
+  const NavigateToCart = () => {
+    navigation.navigate('Cart');
+  };
+
+  const NavigateToReceipts = () => {
+    navigation.navigate('Receipts');
+  };
 
   return (
     <View style={[Styles.containerUncenter, Styles.bgColorWhite]}>
-      <Text
-        style={[Styles.textBig, Styles.textColorPurple, Styles.paddingLeft30]}>
-        History of Receipts
-      </Text>
+      <Head />
+
       {receiptList.length ? (
-        <View style={[{height: '80%'}]}>
+        <View style={Styles.containerUncenter}>
+          <Text
+            style={[
+              Styles.textBig,
+              Styles.textColorPurple,
+              Styles.paddingLeft30,
+            ]}>
+            History of Receipts
+          </Text>
           <ScrollView
             style={[Styles.containerFlex, Styles.marginVertical10]}
             keyboardShouldPersistTaps="handled">
@@ -52,6 +68,12 @@ const Receipts = ({navigation, route}) => {
           </Text>
         </View>
       ) : null}
+      <Navigation
+        nav1={'Cart'}
+        onPress1={NavigateToCart}
+        nav2={'Receipt'}
+        onPress2={NavigateToReceipts}
+      />
     </View>
   );
 };
