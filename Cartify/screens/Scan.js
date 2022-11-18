@@ -1,17 +1,21 @@
-import React, {Component} from 'react';
+import React, {Component, createContext, useContext, useState} from 'react';
 import {RNCamera} from 'react-native-camera';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import Styles from '../styles/styles.js';
-import {TouchableOpacity, Text, View, Image} from 'react-native';
+import {TouchableOpacity, Linking, Text, View, Image} from 'react-native';
 
 import Return from '../assets/return.png';
 
+const ScanContext = createContext();
+
 const Scan = ({navigation, route}) => {
-  // onSuccess = e => {
-  //   Linking.openURL(e.data).catch(err =>
-  //     console.error('An error occured', err),
-  //   );
-  // };
+  const [data, setData] = useState('');
+
+  const onSuccess = e => {
+    navigation.navigate('Cart');
+    setData(e.data); // data QR Code contains
+    console.log(e.data);
+  };
 
   return (
     <View>
@@ -21,8 +25,8 @@ const Scan = ({navigation, route}) => {
         </TouchableOpacity>
       </View>
       <QRCodeScanner
-        // onRead={this.onSuccess}
-        flashMode={RNCamera.Constants.FlashMode.torch}
+        onRead={onSuccess}
+        // flashMode={RNCamera.Constants.FlashMode.torch}
         topContent={
           <Text style={Styles.centerText}>Scans product's qrcode</Text>
         }
@@ -32,8 +36,12 @@ const Scan = ({navigation, route}) => {
           </TouchableOpacity>
         }
       />
+
+      <ScanContext.Provider value={data}></ScanContext.Provider>
     </View>
   );
 };
+
+export const ScanOrder = () => useContext(ScanContext);
 
 export default Scan;

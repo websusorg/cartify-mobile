@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Text,
   View,
@@ -13,15 +13,24 @@ import Styles from '../styles/styles.js';
 import DeleteItemNotice from '../components/DeleteItemNotice';
 import Navigation from '../components/Navigation';
 import Head from '../components/Head';
+import ScanContext from './Scan';
 
 import addItem from '../assets/addItem.png';
 import add from '../assets/add.png';
 
 const Cart = ({navigation, route}) => {
+  const scannedData = useContext(ScanContext);
+
+  const initialDatas = [
+    {name: scannedData, price: 1, quantity: 1, total: 1},
+    {name: scannedData, price: 1, quantity: 1, total: 1},
+    {name: scannedData, price: 1, quantity: 1, total: 1},
+  ];
+
   const [isDelete, setIsDelete] = useState(false);
   const [itemIndex, setItemIndex] = useState(0);
   const [itemData, setItemData] = useState({});
-  const [itemList, setItemList] = useState([]);
+  const [itemList, setItemList] = useState(initialDatas);
 
   const OpenCamera = () => {
     navigation.navigate('Scan');
@@ -29,7 +38,7 @@ const Cart = ({navigation, route}) => {
 
   const AddItem = () => {
     // setItemData({});
-    setItemData({name: 'Bigas', price: 1, quantity: 1, total: 1}); // delete later for integration of back end
+    setItemData({name: data, price: 1, quantity: 1, total: 1}); // delete later for integration of back end
     setItemList([...itemList, itemData]);
     //setItemData(null);
   };
@@ -97,7 +106,7 @@ const Cart = ({navigation, route}) => {
                 <View style={Styles.containerUncenter} key={index}>
                   <Item
                     key={index}
-                    itemName={data.name}
+                    itemName={scannedData}
                     itemPrice={data.price}
                     itemQuantity={data.quantity}
                     itemTotalPrice={data.total}
@@ -129,7 +138,7 @@ const Cart = ({navigation, route}) => {
               </Text>
             </Pressable>
 
-            <Pressable onPress={AddItem} style={Styles.floatingButton}>
+            <Pressable onPress={OpenCamera} style={Styles.floatingButton}>
               <Image source={add}></Image>
             </Pressable>
           </View>
@@ -138,7 +147,7 @@ const Cart = ({navigation, route}) => {
 
       {!itemList.length ? (
         <View style={Styles.containerCenter}>
-          <TouchableOpacity onPress={AddItem} style={Styles.contentCenter}>
+          <TouchableOpacity onPress={OpenCamera} style={Styles.contentCenter}>
             <Image source={addItem}></Image>
 
             <Text style={[Styles.textNormal, Styles.marginVertical10]}>
