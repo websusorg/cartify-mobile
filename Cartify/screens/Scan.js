@@ -5,15 +5,15 @@ import Styles from '../styles/styles.js';
 import {TouchableOpacity, Linking, Text, View, Image} from 'react-native';
 
 import Return from '../assets/return.png';
-
-const ScanContext = createContext();
+import {useCart} from '../contexts/CartContext.js';
 
 const Scan = ({navigation, route}) => {
-  const [data, setData] = useState('');
+  const {addItem} = useCart();
 
   const onSuccess = e => {
     navigation.navigate('Cart');
-    setData(e.data); // data QR Code contains
+
+    addItem({...e.data, quantity: 1});
     console.log(e.data);
   };
 
@@ -36,12 +36,8 @@ const Scan = ({navigation, route}) => {
           </TouchableOpacity>
         }
       />
-
-      <ScanContext.Provider value={data}></ScanContext.Provider>
     </View>
   );
 };
-
-export const ScanOrder = () => useContext(ScanContext);
 
 export default Scan;

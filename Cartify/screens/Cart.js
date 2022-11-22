@@ -17,20 +17,15 @@ import ScanContext from './Scan';
 
 import addItem from '../assets/addItem.png';
 import add from '../assets/add.png';
+import {useCart} from '../contexts/CartContext';
 
 const Cart = ({navigation, route}) => {
-  const scannedData = useContext(ScanContext);
-
-  const initialDatas = [
-    {name: scannedData, price: 1, quantity: 1, total: 1},
-    {name: scannedData, price: 1, quantity: 1, total: 1},
-    {name: scannedData, price: 1, quantity: 1, total: 1},
-  ];
+  const {cartItems, addQuantity, minusQuantity} = useCart();
 
   const [isDelete, setIsDelete] = useState(false);
   const [itemIndex, setItemIndex] = useState(0);
   const [itemData, setItemData] = useState({});
-  const [itemList, setItemList] = useState(initialDatas);
+  const [itemList, setItemList] = useState();
 
   const OpenCamera = () => {
     navigation.navigate('Scan');
@@ -96,12 +91,12 @@ const Cart = ({navigation, route}) => {
         />
       ) : null}
 
-      {itemList.length ? (
+      {cartItems.length ? (
         <View style={Styles.containerUncenter}>
           <ScrollView
             style={[Styles.containerFlex, Styles.marginBottom10]}
             keyboardShouldPersistTaps="handled">
-            {itemList.map((data, index) => {
+            {cartItems.map((data, index) => {
               return (
                 <View style={Styles.containerUncenter} key={index}>
                   <Item
@@ -111,8 +106,8 @@ const Cart = ({navigation, route}) => {
                     itemQuantity={data.quantity}
                     itemTotalPrice={data.total}
                     onRemove={() => ShowNotice(index)}
-                    onIncrease={() => HandleIncrement(data.name)}
-                    onDecrease={() => HandleDecrement(data.name)}
+                    onIncrease={() => addQuantity(data.id)}
+                    onDecrease={() => minusQuantity(data.id)}
                   />
                 </View>
               );
@@ -145,7 +140,7 @@ const Cart = ({navigation, route}) => {
         </View>
       ) : null}
 
-      {!itemList.length ? (
+      {!cartItems.length ? (
         <View style={Styles.containerCenter}>
           <TouchableOpacity onPress={OpenCamera} style={Styles.contentCenter}>
             <Image source={addItem}></Image>

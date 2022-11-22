@@ -16,9 +16,7 @@ const Head = () => {
         Styles.paddingVertical10,
       ]}>
       <Image source={logo} />
-      <Text>
-        ID: {DeviceInfo.getCodename() + '-' + DeviceInfo.getDeviceId()}
-      </Text>
+      <Text>ID: {DeviceInfo.getDeviceId()}</Text>
     </View>
   );
 };

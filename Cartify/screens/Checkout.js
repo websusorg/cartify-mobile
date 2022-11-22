@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Image,
   Text,
@@ -16,6 +16,25 @@ import Styles from '../styles/styles.js';
 import Return from '../assets/return.png';
 
 const Checkout = ({navigation, route}) => {
+  const GenerateReferenceCode = () => {
+    return Math.floor(Math.random() * 999999999999999) + 100000000000001;
+  };
+
+  const refCode = GenerateReferenceCode();
+  const [referenceCode, setReferenceCode] = useState(refCode);
+
+  const RefreshCode = () => {
+    return Math.floor(Math.random() * 99999) + 10001;
+  };
+
+  const code = RefreshCode();
+  const [checkoutCode, setCheckoutCode] = useState(code);
+
+  const current = new Date();
+  const timeDate = `${current.getHours()}:${current.getMinutes()} ${current.getDate()}/${
+    current.getMonth() + 1
+  }/${current.getFullYear()}`;
+
   return (
     <View style={[Styles.containerUncenter, Styles.bgColorWhite]}>
       <View style={Styles.returnButton}>
@@ -43,10 +62,10 @@ const Checkout = ({navigation, route}) => {
         <View style={[Styles.marginHorizontal30, Styles.marginVertical20]}>
           <Text
             style={[Styles.textColorBlack, {fontWeight: '700', fontSize: 16}]}>
-            Reference No.
+            {referenceCode}
           </Text>
 
-          <Text style={Styles.textColorBlack}>15:23 04/11/22</Text>
+          <Text style={Styles.textColorBlack}>{timeDate}</Text>
         </View>
         <ItemSummary />
         <ItemSummary />
@@ -89,13 +108,13 @@ const Checkout = ({navigation, route}) => {
             paddingVertical: 4,
           }}>
           <Text style={[Styles.textBig, Styles.textColorWhite, {height: 25}]}>
-            X166712
+            {checkoutCode}
           </Text>
         </View>
 
         <Pressable
           style={[Styles.checkout, Styles.bgColorWhite]}
-          onPress={() => navigation.navigate('Checkout')}>
+          onPress={() => setCheckoutCode(RefreshCode())}>
           <Text style={{color: '#656ACC', fontSize: 16, fontWeight: '700'}}>
             {' '}
             Refresh Code{' '}
