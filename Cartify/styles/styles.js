@@ -14,6 +14,7 @@ export default StyleSheet.create({
   },
   containerUncenter: {
     flex: 1,
+    height: '100%',
   },
 
   containerFlex: {
@@ -31,6 +32,7 @@ export default StyleSheet.create({
 
   contentCenter: {
     flew: 1,
+    position: 'relative',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -202,8 +204,13 @@ export default StyleSheet.create({
   },
 
   summary: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
     height: 80,
-    borderRadius: 20,
+    marginBottom: -10,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
 
   checkout: {
@@ -212,7 +219,6 @@ export default StyleSheet.create({
     top: 24,
     right: 24,
     borderRadius: 10,
-
     paddingHorizontal: 24,
     paddingVertical: 4,
   },
@@ -235,7 +241,8 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
     height: 80,
-    borderRadius: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
 
   noticeBox: {

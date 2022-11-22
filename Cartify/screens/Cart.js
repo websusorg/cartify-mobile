@@ -20,50 +20,29 @@ import add from '../assets/add.png';
 import {useCart} from '../contexts/CartContext';
 
 const Cart = ({navigation, route}) => {
-  const {cartItems, addQuantity, minusQuantity} = useCart();
+  const {cartItems, addQuantity, minusQuantity, removeItem} = useCart();
 
   const [isDelete, setIsDelete] = useState(false);
-  const [itemIndex, setItemIndex] = useState(0);
-  const [itemData, setItemData] = useState({});
-  const [itemList, setItemList] = useState();
 
   const OpenCamera = () => {
     navigation.navigate('Scan');
   };
 
-  const AddItem = () => {
-    // setItemData({});
-    setItemData({name: data, price: 1, quantity: 1, total: 1}); // delete later for integration of back end
-    setItemList([...itemList, itemData]);
-    //setItemData(null);
-  };
+  // const AddItem = () => {
+  //   // setItemData({});
+  //   setItemData({name: data, price: 1, quantity: 1, total: 1}); // delete later for integration of back end
+  //   setItemList([...itemList, itemData]);
+  //   //setItemData(null);
+  // };
 
-  const RemoveItem = index => {
-    let itemsCopy = [...itemList];
-    itemsCopy.splice(index, 1);
-    setItemList(itemsCopy);
+  // const RemoveItem = index => {
+  //   let itemsCopy = [...itemList];
+  //   itemsCopy.splice(index, 1);
+  //   setItemList(itemsCopy);
 
-    HideNotice();
-  };
+  //   HideNotice();
+  // };
 
-  const HandleIncrement = itemName => {
-    const newItemList = [...itemList];
-    const newItemData = newItemList.find(data => data.name === itemName);
-    newItemData.quantity = newItemData.quantity + 1;
-    newItemData.total = newItemData.price * newItemData.quantity;
-    setItemList(newItemList);
-  };
-
-  const HandleDecrement = itemName => {
-    const newItemList = [...itemList];
-    const newItemData = newItemList.find(data => data.name === itemName);
-    if (newItemData.quantity > 1) {
-      newItemData.quantity = newItemData.quantity - 1;
-      newItemData.total = newItemData.price * newItemData.quantity;
-    }
-
-    setItemList(newItemList);
-  };
   const ShowNotice = index => {
     setIsDelete(true);
     setItemIndex(index);
@@ -87,12 +66,12 @@ const Cart = ({navigation, route}) => {
       {isDelete ? (
         <DeleteItemNotice
           onNo={HideNotice}
-          onYes={() => RemoveItem(itemIndex)}
+          onYes={() => removeItem(itemIndex)}
         />
       ) : null}
 
       {cartItems.length ? (
-        <View style={Styles.containerUncenter}>
+        <View style={[Styles.containerUncenter]}>
           <ScrollView
             style={[Styles.containerFlex, Styles.marginBottom10]}
             keyboardShouldPersistTaps="handled">
@@ -101,11 +80,11 @@ const Cart = ({navigation, route}) => {
                 <View style={Styles.containerUncenter} key={index}>
                   <Item
                     key={index}
-                    itemName={scannedData}
+                    itemName={data.name}
                     itemPrice={data.price}
                     itemQuantity={data.quantity}
                     itemTotalPrice={data.total}
-                    onRemove={() => ShowNotice(index)}
+                    onRemove={() => removeItem(data.id)}
                     onIncrease={() => addQuantity(data.id)}
                     onDecrease={() => minusQuantity(data.id)}
                   />
@@ -118,8 +97,8 @@ const Cart = ({navigation, route}) => {
             <View style={[Styles.marginHorizontal20, Styles.marginVertical10]}>
               <Text style={Styles.textNormal}>Total</Text>
               <Text style={Styles.textSuperBig}>
-                {itemList.reduce((total, current) => {
-                  return (total = total + current.total);
+                {cartItems.reduce((total, current) => {
+                  return (total += current.price * current.quantity);
                 }, 0)}
               </Text>
             </View>

@@ -19,23 +19,23 @@ const Scan = ({navigation, route}) => {
 
   return (
     <View>
-      <View style={Styles.returnButton}>
-        <TouchableOpacity onPress={() => navigation.navigate('Receipts')}>
-          <Image source={Return} />
-        </TouchableOpacity>
-      </View>
       <QRCodeScanner
         onRead={onSuccess}
-        // flashMode={RNCamera.Constants.FlashMode.torch}
-        topContent={
-          <Text style={Styles.centerText}>Scans product's qrcode</Text>
-        }
-        bottomContent={
-          <TouchableOpacity style={Styles.buttonTouchable}>
-            <Text style={Styles.buttonText}>OK. Got it!</Text>
-          </TouchableOpacity>
-        }
+        // // flashMode={RNCamera.Constants.FlashMode.torch}
+        // topContent={
+        //   <Text style={Styles.centerText}>Scans product's qrcode</Text>
+        // }
+        // bottomContent={
+        //   <TouchableOpacity style={Styles.buttonTouchable}>
+        //     <Text style={Styles.buttonText}>OK. Got it!</Text>
+        //   </TouchableOpacity>
+        // }
       />
+      <TouchableOpacity
+        style={Styles.returnButton}
+        onPress={() => navigation.navigate('Cart')}>
+        <Image source={Return} />
+      </TouchableOpacity>
     </View>
   );
 };
