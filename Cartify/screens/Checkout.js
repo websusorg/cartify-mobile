@@ -15,30 +15,41 @@ import Styles from '../styles/styles.js';
 
 import Return from '../assets/return.png';
 
+import {useCart} from '../contexts/CartContext';
+import {useGlobal} from '../contexts/GlobalContext';
+
 const Checkout = ({navigation, route}) => {
-  const GenerateReferenceCode = () => {
-    return Math.floor(Math.random() * 999999999999999) + 100000000000001;
+  const {cartItems, removeAllItems} = useCart();
+  const {
+    referenceCode,
+    getReferenceCode,
+    refreshCode,
+    getTimeDate,
+    computeTotalPrice,
+  } = useGlobal();
+
+  const [lastReferenceCode, setLastReferenceCode] = useState(referenceCode);
+  const [checkoutCode, setCheckoutCode] = useState(refreshCode());
+
+  const ReturnClearCart = () => {
+    removeAllItems();
+    navigation.navigate('Cart');
   };
+  // const GenerateReferenceCode = () => {
+  //   return Math.floor(Math.random() * 999999999999999) + 100000000000001;
+  // };
 
-  const refCode = GenerateReferenceCode();
-  const [referenceCode, setReferenceCode] = useState(refCode);
+  // const current = new Date();
+  // const timeDate = `${current.getHours()}:${current.getMinutes()} ${current.getDate()}/${
+  //   current.getMonth() + 1
+  // }/${current.getFullYear()}`;
 
-  const RefreshCode = () => {
-    return Math.floor(Math.random() * 99999) + 10001;
-  };
-
-  const code = RefreshCode();
-  const [checkoutCode, setCheckoutCode] = useState(code);
-
-  const current = new Date();
-  const timeDate = `${current.getHours()}:${current.getMinutes()} ${current.getDate()}/${
-    current.getMonth() + 1
-  }/${current.getFullYear()}`;
+  const totalPriceToPay = computeTotalPrice(cartItems);
 
   return (
     <View style={[Styles.containerUncenter, Styles.bgColorWhite]}>
       <View style={Styles.returnButton}>
-        <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
+        <TouchableOpacity onPress={() => ReturnClearCart()}>
           <Image source={Return} />
         </TouchableOpacity>
       </View>
@@ -62,33 +73,34 @@ const Checkout = ({navigation, route}) => {
         <View style={[Styles.marginHorizontal30, Styles.marginVertical20]}>
           <Text
             style={[Styles.textColorBlack, {fontWeight: '700', fontSize: 16}]}>
-            {referenceCode}
+            {getReferenceCode(lastReferenceCode)}
           </Text>
 
-          <Text style={Styles.textColorBlack}>{timeDate}</Text>
+          <Text style={Styles.textColorBlack}>{getTimeDate()}</Text>
         </View>
-        <ItemSummary />
-        <ItemSummary />
-        <ItemSummary />
-        <ItemSummary />
-        <ItemSummary />
-        <ItemSummary />
-        <ItemSummary />
-        <ItemSummary />
-        <ItemSummary />
-        <ItemSummary />
-        <ItemSummary />
-        <ItemSummary />
-        <ItemSummary />
+        {cartItems.map((data, index) => {
+          return (
+            <View style={Styles.containerUncenter} key={index}>
+              {
+                <ItemSummary
+                  key={index}
+                  itemName={data.name}
+                  itemPrice={data.price}
+                  itemQuantity={data.quantity}
+                />
+              }
+            </View>
+          );
+        })}
         <View style={[Styles.horizontalLine, Styles.marginHorizontal30]} />
         <PriceSummary
           priceName={'Subtotal:'}
-          priceAmount={100}
+          priceAmount={totalPriceToPay}
           hasSign={true}
         />
         <PriceSummary
           priceName={'Total:'}
-          priceAmount={100}
+          priceAmount={totalPriceToPay}
           hasSign={true}
           moreStyles={
             (Styles.textColorBlack, {fontWeight: '700', fontSize: 16})
@@ -114,7 +126,7 @@ const Checkout = ({navigation, route}) => {
 
         <Pressable
           style={[Styles.checkout, Styles.bgColorWhite]}
-          onPress={() => setCheckoutCode(RefreshCode())}>
+          onPress={() => setCheckoutCode(refreshCode())}>
           <Text style={{color: '#656ACC', fontSize: 16, fontWeight: '700'}}>
             {' '}
             Refresh Code{' '}

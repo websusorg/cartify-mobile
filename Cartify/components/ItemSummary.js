@@ -3,7 +3,9 @@ import {View, Text, TouchableOpacity} from 'react-native';
 
 import Styles from '../styles/styles.js';
 
-const ItemSummary = ({itemName, itemQuantity, itemTotalPrice}) => {
+const ItemSummary = ({itemName, itemQuantity, itemPrice}) => {
+  const totalPrice = itemPrice * itemQuantity;
+
   return (
     <View
       style={[
@@ -12,11 +14,11 @@ const ItemSummary = ({itemName, itemQuantity, itemTotalPrice}) => {
         Styles.paddingVertical10,
       ]}>
       <View style={[Styles.contentAlign, Styles.width75]}>
-        <Text style={Styles.textColorBlack}>QTY. {itemQuantity} 1</Text>
-        <Text style={Styles.textColorBlack}>{itemName} pepsi</Text>
+        <Text style={Styles.textColorBlack}>{itemQuantity + '  '}</Text>
+        <Text style={Styles.textColorBlack}>{itemName}</Text>
       </View>
       <View style={Styles.contentAlign}>
-        <Text style={Styles.textColorBlack}>&#8369; {itemTotalPrice} 100</Text>
+        <Text style={Styles.textColorBlack}>&#8369; {totalPrice}</Text>
       </View>
     </View>
   );

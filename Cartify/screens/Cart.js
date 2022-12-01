@@ -17,35 +17,28 @@ import ScanContext from './Scan';
 
 import addItem from '../assets/addItem.png';
 import add from '../assets/add.png';
+
 import {useCart} from '../contexts/CartContext';
+import {useGlobal} from '../contexts/GlobalContext';
 
 const Cart = ({navigation, route}) => {
   const {cartItems, addQuantity, minusQuantity, removeItem} = useCart();
+  const {computeTotalPrice} = useGlobal();
 
   const [isDelete, setIsDelete] = useState(false);
+  const [id, setID] = useState();
 
   const OpenCamera = () => {
     navigation.navigate('Scan');
   };
 
-  // const AddItem = () => {
-  //   // setItemData({});
-  //   setItemData({name: data, price: 1, quantity: 1, total: 1}); // delete later for integration of back end
-  //   setItemList([...itemList, itemData]);
-  //   //setItemData(null);
-  // };
-
-  // const RemoveItem = index => {
-  //   let itemsCopy = [...itemList];
-  //   itemsCopy.splice(index, 1);
-  //   setItemList(itemsCopy);
-
-  //   HideNotice();
-  // };
-
-  const ShowNotice = index => {
+  const ShowNotice = id => {
     setIsDelete(true);
-    setItemIndex(index);
+    setID(id);
+  };
+  const Agree = id => {
+    removeItem(id);
+    HideNotice();
   };
   const HideNotice = () => {
     setIsDelete(false);
@@ -64,10 +57,7 @@ const Cart = ({navigation, route}) => {
       <Head />
 
       {isDelete ? (
-        <DeleteItemNotice
-          onNo={HideNotice}
-          onYes={() => removeItem(itemIndex)}
-        />
+        <DeleteItemNotice onNo={HideNotice} onYes={() => Agree(id)} />
       ) : null}
 
       {cartItems.length ? (
@@ -84,7 +74,7 @@ const Cart = ({navigation, route}) => {
                     itemPrice={data.price}
                     itemQuantity={data.quantity}
                     itemTotalPrice={data.total}
-                    onRemove={() => removeItem(data.id)}
+                    onRemove={() => ShowNotice(data.id)}
                     onIncrease={() => addQuantity(data.id)}
                     onDecrease={() => minusQuantity(data.id)}
                   />
@@ -97,9 +87,7 @@ const Cart = ({navigation, route}) => {
             <View style={[Styles.marginHorizontal20, Styles.marginVertical10]}>
               <Text style={Styles.textNormal}>Total</Text>
               <Text style={Styles.textSuperBig}>
-                {cartItems.reduce((total, current) => {
-                  return (total += current.price * current.quantity);
-                }, 0)}
+                {computeTotalPrice(cartItems)}
               </Text>
             </View>
 

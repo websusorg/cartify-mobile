@@ -24,25 +24,31 @@ import ReceiptDetails from './screens/ReceiptDetails';
 
 import logo from './assets/Logo.jpg';
 import CartProvider from './contexts/CartContext.js';
+import ReceiptProvider from './contexts/ReceiptContext.js';
+import GlobalProvider from './contexts/GlobalContext.js';
 
 const Stack = createNativeStackNavigator();
 
 const App: () => Node = () => {
   const navigationRef = useNavigationContainerRef();
   return (
-    <CartProvider>
-      <NavigationContainer ref={navigationRef} style={Styles.bgColorWhite}>
-        <Stack.Navigator
-          initialRouteName="Cart"
-          screenOptions={{headerShown: false}}>
-          <Stack.Screen name="Cart" component={Cart} />
-          <Stack.Screen name="Scan" component={Scan} />
-          <Stack.Screen name="Checkout" component={Checkout} />
-          <Stack.Screen name="Receipts" component={Receipts} />
-          <Stack.Screen name="ReceiptSummary" component={ReceiptDetails} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </CartProvider>
+    <GlobalProvider>
+      <CartProvider>
+        <ReceiptProvider>
+          <NavigationContainer ref={navigationRef} style={Styles.bgColorWhite}>
+            <Stack.Navigator
+              initialRouteName="Receipts"
+              screenOptions={{headerShown: false}}>
+              <Stack.Screen name="Cart" component={Cart} />
+              <Stack.Screen name="Scan" component={Scan} />
+              <Stack.Screen name="Checkout" component={Checkout} />
+              <Stack.Screen name="Receipts" component={Receipts} />
+              <Stack.Screen name="ReceiptSummary" component={ReceiptDetails} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </ReceiptProvider>
+      </CartProvider>
+    </GlobalProvider>
   );
 };
 

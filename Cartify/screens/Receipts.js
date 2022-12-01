@@ -8,16 +8,12 @@ import Head from '../components/Head';
 
 import noReciept from '../assets/noReciept.png';
 
+import {useReceipt} from '../contexts/ReceiptContext';
+import {useGlobal} from '../contexts/GlobalContext';
+
 const Receipts = ({navigation, route}) => {
-  const initialData = [
-    {date: '12 / 11 / 22', refno: 10909929, price: 100},
-    {date: '09 / 22 / 22', refno: 98009890, price: 200},
-    {date: '09 / 22 / 22', refno: 98009890, price: 200},
-    {date: '09 / 22 / 22', refno: 98009890, price: 200},
-    {date: '09 / 22 / 22', refno: 98009890, price: 200},
-    {date: '09 / 22 / 22', refno: 98009890, price: 200},
-  ];
-  const [receiptList, setReceiptList] = useState([]);
+  const {receiptList} = useReceipt();
+  const {computeTotalPrice} = useGlobal();
 
   const NavigateToCart = () => {
     navigation.navigate('Cart');
@@ -50,8 +46,8 @@ const Receipts = ({navigation, route}) => {
                   <Receipt
                     key={index}
                     date={data.date}
-                    refno={data.refno}
-                    price={data.price}
+                    refno={data.referenceNo}
+                    price={computeTotalPrice(data.items)}
                     onPress={navigation}
                   />
                 </View>

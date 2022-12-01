@@ -13,7 +13,9 @@ const Receipt = ({date, refno, price, onPress}) => {
           Styles.marginHorizontal10,
           Styles.contentAlign,
         ]}
-        onPress={() => onPress.navigate('ReceiptSummary')}>
+        onPress={() =>
+          onPress.navigate('ReceiptSummary', {referenceNo: refno})
+        }>
         <View style={[Styles.marginAll10, Styles.subDetails]}>
           <Text style={Styles.textNormal}>{date}</Text>
           <Text style={[Styles.textBig, Styles.marginTop10]}>{refno}</Text>

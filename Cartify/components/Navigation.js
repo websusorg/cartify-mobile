@@ -19,7 +19,6 @@ const NavActiveBar = () => (
 const ItemSummary = ({nav1, onPress1, nav2, onPress2}) => {
   const route = useRoute();
 
-  console.log(route.name);
   return (
     <View style={[Styles.textNormal, Styles.nav]}>
       <TouchableOpacity
