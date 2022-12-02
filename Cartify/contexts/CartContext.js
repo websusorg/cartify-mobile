@@ -4,18 +4,17 @@ const CartContext = createContext(null);
 
 const CartProvider = ({children}) => {
   const proxyItems = [
-    {id: 1, name: 'Rice', price: 45.0, quantity: 5},
-    {id: 2, name: 'Coke', price: 15.0, quantity: 2},
-    {id: 3, name: 'Fruties', price: 8.0, quantity: 2},
+    {_id: '6389e3182bd61e587393a5e8', name: 'Cheese', price: 50, quantity: 1},
+    {_id: '638a225e7c543875d722e91f', name: 'Milk', price: 50, quantity: 1},
   ];
 
-  const [cartItems, setCartItems] = useState(proxyItems);
+  const [cartItems, setCartItems] = useState([]);
 
   // const addItem = item => setCartItems(prev => [...prev, item]);
 
   const addItem = item => {
-    if (cartItems.some(obj => obj.id === item.id)) {
-      addQuantity(item.id);
+    if (cartItems.some(obj => obj._id === item._id)) {
+      addQuantity(item._id);
     } else {
       setCartItems(prev => [...prev, item]);
     }
@@ -24,7 +23,7 @@ const CartProvider = ({children}) => {
   const removeItem = useCallback(
     itemId => {
       return setCartItems(prevItems =>
-        prevItems.filter(item => item.id !== itemId),
+        prevItems.filter(item => item._id !== itemId),
       );
     },
     [cartItems],
@@ -37,7 +36,7 @@ const CartProvider = ({children}) => {
   const addQuantity = useCallback(
     itemId => {
       const newState = cartItems.map(item =>
-        item.id === itemId ? {...item, quantity: (item.quantity += 1)} : item,
+        item._id === itemId ? {...item, quantity: (item.quantity += 1)} : item,
       );
 
       setCartItems(newState);
@@ -48,7 +47,7 @@ const CartProvider = ({children}) => {
   const minusQuantity = useCallback(
     itemId => {
       const newState = cartItems.map(item =>
-        item.id === itemId
+        item._id === itemId
           ? {
               ...item,
               quantity: (item.quantity =
@@ -62,7 +61,7 @@ const CartProvider = ({children}) => {
     [cartItems],
   );
 
-  // decrecated code
+  // deprecated code
   // const AddItem = () => {
   //   // setItemData({});
   //   setItemData({name: data, price: 1, quantity: 1, total: 1}); // delete later for integration of back end

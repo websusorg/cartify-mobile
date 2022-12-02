@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useEffect, useMemo} from 'react';
+import moment from 'moment';
 import {Image, Text, View, ScrollView} from 'react-native';
 
 import Receipt from '../components/Receipt';
@@ -10,10 +11,10 @@ import noReciept from '../assets/noReciept.png';
 
 import {useReceipt} from '../contexts/ReceiptContext';
 import {useGlobal} from '../contexts/GlobalContext';
+import {useRecoverReceipt} from '../integration/cartaction';
 
 const Receipts = ({navigation, route}) => {
-  const {receiptList} = useReceipt();
-  const {computeTotalPrice} = useGlobal();
+  const {data, error, isValidating} = useRecoverReceipt();
 
   const NavigateToCart = () => {
     navigation.navigate('Cart');
@@ -22,6 +23,21 @@ const Receipts = ({navigation, route}) => {
   const NavigateToReceipts = () => {
     navigation.navigate('Receipts');
   };
+
+  if (isValidating) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  const receiptList = data?.map(product => ({
+    date: moment(product.createdAt).format('MM DD YYYY'),
+    refno: product._id,
+    price: product.total,
+    generatedCode: product.generatedCode,
+  }));
 
   return (
     <View style={[Styles.containerUncenter, Styles.bgColorWhite]}>
@@ -46,8 +62,9 @@ const Receipts = ({navigation, route}) => {
                   <Receipt
                     key={index}
                     date={data.date}
-                    refno={data.referenceNo}
-                    price={computeTotalPrice(data.items)}
+                    refno={data.refno}
+                    price={data.price}
+                    generatedCode={data.generatedCode}
                     onPress={navigation}
                   />
                 </View>

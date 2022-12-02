@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import {
   Text,
   View,
@@ -20,9 +20,13 @@ import add from '../assets/add.png';
 import {useCart} from '../contexts/CartContext';
 import {useGlobal} from '../contexts/GlobalContext';
 
+import {useCheckout} from '../integration/cartaction';
+
+import DeviceInfo from 'react-native-device-info';
+
 const Cart = ({navigation, route}) => {
   const {cartItems, addQuantity, minusQuantity, removeItem} = useCart();
-  const {computeTotalPrice} = useGlobal();
+  const {computeTotalPrice, getDeviceId} = useGlobal();
 
   const [isDelete, setIsDelete] = useState(false);
   const [id, setID] = useState();
@@ -51,6 +55,36 @@ const Cart = ({navigation, route}) => {
     navigation.navigate('Receipts');
   };
 
+  const {data, error, isValidating, checkout} = useCheckout();
+
+  const cartPost = useMemo(
+    () => ({
+      products: cartItems.map(item => ({
+        product: item._id,
+        quantity: item.quantity,
+      })),
+      deviceId: 'DUB-L22',
+      total: computeTotalPrice(cartItems),
+    }),
+    [cartItems],
+  );
+  const checkoutCart = useCallback(async () => {
+    // console.log(cartPost);
+    await checkout(cartPost);
+  }, [cartPost]);
+
+  useEffect(() => {
+    (() => {
+      if (!data && !error) return;
+      if (error) return console.log({error});
+
+      navigation.navigate('Checkout', {
+        generatedCode: data?.generatedCode,
+        referenceCode: data?._id,
+      });
+    })();
+  }, [data, error]);
+
   return (
     <View style={[Styles.containerUncenter, Styles.bgColorWhite]}>
       <Head />
@@ -72,10 +106,9 @@ const Cart = ({navigation, route}) => {
                     itemName={data.name}
                     itemPrice={data.price}
                     itemQuantity={data.quantity}
-                    itemTotalPrice={data.total}
-                    onRemove={() => ShowNotice(data.id)}
-                    onIncrease={() => addQuantity(data.id)}
-                    onDecrease={() => minusQuantity(data.id)}
+                    onRemove={() => ShowNotice(data._id)}
+                    onIncrease={() => addQuantity(data._id)}
+                    onDecrease={() => minusQuantity(data._id)}
                   />
                 </View>
               );
@@ -83,7 +116,7 @@ const Cart = ({navigation, route}) => {
           </ScrollView>
 
           <View style={[Styles.bgColorLightPurple, Styles.summary]}>
-            <View style={[Styles.marginHorizontal20, Styles.marginVertical10]}>
+            <View style={[Styles.marginHorizontal30, Styles.marginVertical20]}>
               <Text style={Styles.textNormal}>Total</Text>
               <Text style={Styles.textSuperBig}>
                 {computeTotalPrice(cartItems)}
@@ -91,8 +124,12 @@ const Cart = ({navigation, route}) => {
             </View>
 
             <Pressable
-              style={[Styles.checkout, Styles.bgColorWhite]}
-              onPress={() => navigation.navigate('Checkout')}>
+              style={[
+                Styles.checkout,
+                Styles.bgColorWhite,
+                {position: 'absolute', height: 30, top: 30, right: 40},
+              ]}
+              onPress={checkoutCart}>
               <Text style={{color: '#656ACC', fontSize: 16, fontWeight: '700'}}>
                 {' '}
                 Checkout{' '}

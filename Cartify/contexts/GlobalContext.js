@@ -1,4 +1,5 @@
 import {createContext, useContext, useMemo, useState} from 'react';
+import DeviceInfo from 'react-native-device-info';
 
 const GlobalContext = createContext(null);
 
@@ -30,6 +31,10 @@ const GlobalProvider = ({children}) => {
     return totalPriceToPay;
   };
 
+  const getDeviceId = () => {
+    return DeviceInfo.getDeviceId();
+  };
+
   const value = useMemo(
     () => ({
       referenceCode,
@@ -37,6 +42,7 @@ const GlobalProvider = ({children}) => {
       refreshCode,
       getTimeDate,
       computeTotalPrice,
+      getDeviceId,
     }),
     [
       referenceCode,
@@ -44,6 +50,7 @@ const GlobalProvider = ({children}) => {
       refreshCode,
       getTimeDate,
       computeTotalPrice,
+      getDeviceId,
     ],
   );
 

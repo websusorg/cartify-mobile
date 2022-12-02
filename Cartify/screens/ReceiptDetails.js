@@ -10,14 +10,23 @@ import Return from '../assets/return.png';
 import {useGlobal} from '../contexts/GlobalContext';
 import {useReceipt} from '../contexts/ReceiptContext';
 
-const ReceiptDetails = ({navigation, route}) => {
-  const {computeTotalPrice} = useGlobal();
-  const {getReceiptDetails} = useReceipt();
-  const {referenceNo} = route.params;
-  const receiptDetails = getReceiptDetails(referenceNo);
-  const totalPriceToPay = computeTotalPrice(receiptDetails.items);
+import {useGetCart} from '../integration/cartaction';
 
-  console.log(receiptDetails);
+const ReceiptDetails = ({navigation, route}) => {
+  const {generatedCode} = route.params;
+
+  const {data, error, isValidating} = useGetCart(generatedCode);
+
+  if (isValidating)
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+
+  const vat = (data?.total * 0.12).toFixed(2);
+  const vatSale = (data?.total - vat).toFixed(2);
+
   return (
     <View style={[Styles.containerUncenter, Styles.bgColorWhite]}>
       <View style={Styles.returnButton}>
@@ -45,47 +54,54 @@ const ReceiptDetails = ({navigation, route}) => {
         <View style={[Styles.marginHorizontal30, Styles.marginVertical20]}>
           <Text
             style={[Styles.textColorBlack, {fontWeight: '700', fontSize: 16}]}>
-            {receiptDetails.referenceNo}
+            {data?._id.slice(0, 8)}
           </Text>
 
           <Text style={Styles.textColorBlack}>15:23 04/11/22</Text>
         </View>
-        {receiptDetails.items.map((data, index) => {
+        {data?.products?.map((p, index) => {
           return (
             <View style={Styles.containerUncenter} key={index}>
               {
                 <ItemSummary
                   key={index}
-                  itemName={data.name}
-                  itemPrice={data.price}
-                  itemQuantity={data.quantity}
+                  itemName={p.product.name}
+                  itemPrice={p.product.price}
+                  itemQuantity={p.quantity}
                 />
               }
             </View>
           );
         })}
-
         <View style={[Styles.horizontalLine, Styles.marginHorizontal30]} />
         <PriceSummary
-          priceName={'Subtotal:'}
-          priceAmount={totalPriceToPay}
-          hasSign={true}
-        />
-        <PriceSummary
           priceName={'Total:'}
-          priceAmount={totalPriceToPay}
+          priceAmount={data?.total.toFixed(2)}
           hasSign={true}
           moreStyles={
             (Styles.textColorBlack, {fontWeight: '700', fontSize: 16})
           }
         />
-        {/* <PriceSummary priceName={'Cash:'} />
-        <PriceSummary priceName={'Change Due:'} />
-        <PriceSummary priceName={'Items Purchased:'} />
-        <PriceSummary priceName={'Vatable Sale:'} />
-        <PriceSummary priceName={'VAT(12%)'} />
-        <PriceSummary priceName={'VAT Exempt Sale:'} />
-        <PriceSummary priceName={'Zero Rated Sale:'} /> */}
+        <PriceSummary
+          priceName={'Cash:'}
+          priceAmount={data?.paymentAmount.toFixed(2)}
+          hasSign
+        />
+        <PriceSummary
+          priceName={'Change Due:'}
+          priceAmount={data?.paymentAmount - data?.total}
+          hasSign
+        />
+        <PriceSummary
+          priceName={'Items Purchased:'}
+          priceAmount={data?.products.length}
+        />
+        <PriceSummary
+          priceName={'Vatable Sale:'}
+          priceAmount={vatSale}
+          hasSign
+        />
+        <PriceSummary priceName={'VAT(12%)'} priceAmount={vat} hasSign />
       </ScrollView>
     </View>
   );

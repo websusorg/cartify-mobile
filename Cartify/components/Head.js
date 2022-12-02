@@ -1,13 +1,16 @@
 import React from 'react';
 
-import DeviceInfo from 'react-native-device-info';
 import {Text, View, Image} from 'react-native';
 
 import Styles from '../styles/styles.js';
 
 import logo from '../assets/Logo.jpg';
 
+import {useGlobal} from '../contexts/GlobalContext';
+
 const Head = () => {
+  const {getDeviceId} = useGlobal();
+
   return (
     <View
       style={[
@@ -16,7 +19,7 @@ const Head = () => {
         Styles.paddingVertical10,
       ]}>
       <Image source={logo} />
-      <Text>ID: {DeviceInfo.getDeviceId()}</Text>
+      <Text>ID: {getDeviceId()}</Text>
     </View>
   );
 };

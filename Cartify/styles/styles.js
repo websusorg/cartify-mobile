@@ -206,17 +206,13 @@ export default StyleSheet.create({
   summary: {
     position: 'relative',
     width: '100%',
-    height: 100,
+    height: 110,
     marginBottom: -20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
 
   checkout: {
-    position: 'absolute',
-    height: 30,
-    top: 24,
-    right: 24,
     borderRadius: 10,
     paddingHorizontal: 24,
     paddingVertical: 4,

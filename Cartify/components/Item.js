@@ -7,7 +7,6 @@ const Item = ({
   itemName,
   itemPrice,
   itemQuantity,
-  itemTotalPrice,
   onRemove,
   onIncrease,
   onDecrease,
