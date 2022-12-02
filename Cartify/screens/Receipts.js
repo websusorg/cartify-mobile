@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Image, Text, View, ScrollView, TouchableOpacity} from 'react-native';
+import React from 'react';
+import {Image, Text, View, ScrollView} from 'react-native';
 
 import Receipt from '../components/Receipt';
 import Styles from '../styles/styles.js';
@@ -58,7 +58,7 @@ const Receipts = ({navigation, route}) => {
       ) : null}
       {!receiptList.length ? (
         <View style={Styles.containerCenter}>
-          <Image source={noReciept}></Image>
+          <Image source={noReciept} />
           <Text style={[Styles.textNormal, Styles.marginVertical10]}>
             Opps! It looks a bit empty here
           </Text>

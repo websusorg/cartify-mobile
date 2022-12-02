@@ -1,11 +1,10 @@
-import React, {Component, Dimensions, useContext, useState} from 'react';
+import React from 'react';
 import {RNCamera} from 'react-native-camera';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import Styles from '../styles/styles.js';
-import {TouchableOpacity, Linking, Text, View, Image} from 'react-native';
+import {TouchableOpacity, Text, View, Image} from 'react-native';
 
 import Return from '../assets/return.png';
-import Scanner from '../assets/scan.png';
 import {useCart} from '../contexts/CartContext.js';
 
 const Scan = ({navigation, route}) => {

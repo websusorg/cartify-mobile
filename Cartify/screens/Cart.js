@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState} from 'react';
 import {
   Text,
   View,
@@ -13,7 +13,6 @@ import Styles from '../styles/styles.js';
 import DeleteItemNotice from '../components/DeleteItemNotice';
 import Navigation from '../components/Navigation';
 import Head from '../components/Head';
-import ScanContext from './Scan';
 
 import addItem from '../assets/addItem.png';
 import add from '../assets/add.png';

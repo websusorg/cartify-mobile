@@ -6,14 +6,13 @@
  * @flow strict-local
  */
 
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import type {Node} from 'react';
 import {
   NavigationContainer,
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import DeviceInfo from 'react-native-device-info';
 import Styles from './styles/styles.js';
 
 import Cart from './screens/Cart';
@@ -22,7 +21,6 @@ import Checkout from './screens/Checkout';
 import Receipts from './screens/Receipts';
 import ReceiptDetails from './screens/ReceiptDetails';
 
-import logo from './assets/Logo.jpg';
 import CartProvider from './contexts/CartContext.js';
 import ReceiptProvider from './contexts/ReceiptContext.js';
 import GlobalProvider from './contexts/GlobalContext.js';

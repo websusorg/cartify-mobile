@@ -8,7 +8,6 @@ import {
   Pressable,
 } from 'react-native';
 
-import Receipt from '../components/Receipt';
 import ItemSummary from '../components/ItemSummary';
 import PriceSummary from '../components/PriceSummary';
 import Styles from '../styles/styles.js';

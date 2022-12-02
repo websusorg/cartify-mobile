@@ -14,7 +14,7 @@ const CartProvider = ({children}) => {
   // const addItem = item => setCartItems(prev => [...prev, item]);
 
   const addItem = item => {
-    if (cartItems.some(obj => obj.id == item.id)) {
+    if (cartItems.some(obj => obj.id === item.id)) {
       addQuantity(item.id);
     } else {
       setCartItems(prev => [...prev, item]);
@@ -32,7 +32,7 @@ const CartProvider = ({children}) => {
 
   const removeAllItems = useCallback(() => {
     return setCartItems([]);
-  });
+  }, [cartItems]);
 
   const addQuantity = useCallback(
     itemId => {

@@ -1,14 +1,12 @@
 import React from 'react';
 import {Image, Text, View, ScrollView, TouchableOpacity} from 'react-native';
 
-import Receipt from '../components/Receipt';
 import ItemSummary from '../components/ItemSummary';
 import PriceSummary from '../components/PriceSummary';
 import Styles from '../styles/styles.js';
 
 import Return from '../assets/return.png';
 
-// import {useCart} from '../contexts/CartContext';
 import {useGlobal} from '../contexts/GlobalContext';
 import {useReceipt} from '../contexts/ReceiptContext';
 

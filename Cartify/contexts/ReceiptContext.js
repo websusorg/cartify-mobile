@@ -25,13 +25,12 @@ const ReceiptProvider = ({children}) => {
 
   const [receiptList, setReceiptList] = useState(proxyReceipt);
 
-  const getReceiptDetails = referenceNo => {
-    const detail = receiptList.find(details => {
+  const getReceiptDetails = useCallback(referenceNo => {
+    return receiptList.find(details => {
       return details.referenceNo === referenceNo;
     });
+  }, []);
 
-    return detail;
-  };
   const value = useMemo(
     () => ({
       receiptList,
