@@ -40,6 +40,12 @@ export default StyleSheet.create({
   contentAlign: {
     flexDirection: 'row',
   },
+
+  alertButtons: {
+    marginTop: 20,
+    flexDirection: 'row',
+  },
+
   textSmall: {
     color: '#2F2F2F',
     fontSize: 12,
@@ -198,7 +204,7 @@ export default StyleSheet.create({
   },
 
   contentButton: {
-    width: 100,
+    width: 80,
     height: 30,
     borderRadius: 10,
   },
@@ -206,7 +212,7 @@ export default StyleSheet.create({
   summary: {
     position: 'relative',
     width: '100%',
-    height: 110,
+    height: 100,
     marginBottom: -20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -247,8 +253,8 @@ export default StyleSheet.create({
   },
 
   returnButton: {
-    flexDirection: 'row-reverse',
-    paddingTop: 30,
+    flexDirection: 'row',
+    marginVertical: 15,
     paddingHorizontal: 30,
   },
 

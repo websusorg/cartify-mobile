@@ -3,26 +3,21 @@ import {Image, Text, View, ScrollView, TouchableOpacity} from 'react-native';
 
 import ItemSummary from '../components/ItemSummary';
 import PriceSummary from '../components/PriceSummary';
+import Loading from '../components/Loading';
 import Styles from '../styles/styles.js';
 
 import Return from '../assets/return.png';
-
-import {useGlobal} from '../contexts/GlobalContext';
-import {useReceipt} from '../contexts/ReceiptContext';
 
 import {useGetCart} from '../integration/cartaction';
 
 const ReceiptDetails = ({navigation, route}) => {
   const {generatedCode} = route.params;
 
-  const {data, error, isValidating} = useGetCart(generatedCode);
+  const {data, isValidating} = useGetCart(generatedCode);
 
-  if (isValidating)
-    return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
-    );
+  if (isValidating) {
+    return <Loading />;
+  }
 
   const vat = (data?.total * 0.12).toFixed(2);
   const vatSale = (data?.total - vat).toFixed(2);

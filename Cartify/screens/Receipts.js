@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo} from 'react';
+import React from 'react';
 import moment from 'moment';
 import {Image, Text, View, ScrollView} from 'react-native';
 
@@ -6,15 +6,13 @@ import Receipt from '../components/Receipt';
 import Styles from '../styles/styles.js';
 import Navigation from '../components/Navigation';
 import Head from '../components/Head';
-
+import Loading from '../components/Loading';
 import noReciept from '../assets/noReciept.png';
 
-import {useReceipt} from '../contexts/ReceiptContext';
-import {useGlobal} from '../contexts/GlobalContext';
 import {useRecoverReceipt} from '../integration/cartaction';
 
 const Receipts = ({navigation, route}) => {
-  const {data, error, isValidating} = useRecoverReceipt();
+  const {data, isValidating} = useRecoverReceipt();
 
   const NavigateToCart = () => {
     navigation.navigate('Cart');
@@ -25,11 +23,7 @@ const Receipts = ({navigation, route}) => {
   };
 
   if (isValidating) {
-    return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
-    );
+    return <Loading />;
   }
 
   const receiptList = data?.map(product => ({
@@ -42,7 +36,6 @@ const Receipts = ({navigation, route}) => {
   return (
     <View style={[Styles.containerUncenter, Styles.bgColorWhite]}>
       <Head />
-
       {receiptList.length ? (
         <View style={Styles.containerUncenter}>
           <Text
@@ -56,15 +49,15 @@ const Receipts = ({navigation, route}) => {
           <ScrollView
             style={[Styles.containerFlex, Styles.marginVertical10]}
             keyboardShouldPersistTaps="handled">
-            {receiptList.map((data, index) => {
+            {receiptList.map((mapData, index) => {
               return (
                 <View style={Styles.containerUncenter} key={index}>
                   <Receipt
                     key={index}
-                    date={data.date}
-                    refno={data.refno}
-                    price={data.price}
-                    generatedCode={data.generatedCode}
+                    date={mapData.date}
+                    refno={mapData.refno}
+                    price={mapData.price}
+                    generatedCode={mapData.generatedCode}
                     onPress={navigation}
                   />
                 </View>

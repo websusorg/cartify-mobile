@@ -3,20 +3,19 @@ import {Text, View, TouchableOpacity} from 'react-native';
 
 import Styles from '../styles/styles.js';
 
-const DeleteItemNotice = ({onNo, onYes}) => {
+const Alert = ({alertMessage, onNo, onYes}) => {
   return (
     <View style={Styles.containerOverlay}>
       <View
         style={[Styles.contentCenter, Styles.bgColorWhite, Styles.noticeBox]}>
-        <Text>Are you sure you want to</Text>
-        <Text>delete this item?</Text>
-        <View style={[Styles.contentAlign]}>
+        <Text>{alertMessage}</Text>
+        <View style={Styles.alertButtons}>
           <TouchableOpacity
             style={[
               Styles.bgColorPurple,
               Styles.contentButton,
               Styles.contentCenter,
-              Styles.marginAll20,
+              Styles.marginAll10,
             ]}
             onPress={onNo}>
             <Text style={Styles.textColorWhite}>No</Text>
@@ -26,7 +25,7 @@ const DeleteItemNotice = ({onNo, onYes}) => {
               Styles.bgColorRed,
               Styles.contentButton,
               Styles.contentCenter,
-              Styles.marginAll20,
+              Styles.marginAll10,
             ]}
             onPress={onYes}>
             <Text>Yes</Text>
@@ -36,4 +35,4 @@ const DeleteItemNotice = ({onNo, onYes}) => {
     </View>
   );
 };
-export default DeleteItemNotice;
+export default Alert;

@@ -10,7 +10,7 @@ import {
 
 import Item from '../components/Item';
 import Styles from '../styles/styles.js';
-import DeleteItemNotice from '../components/DeleteItemNotice';
+import Alert from '../components/Alert';
 import Navigation from '../components/Navigation';
 import Head from '../components/Head';
 
@@ -26,7 +26,7 @@ import DeviceInfo from 'react-native-device-info';
 
 const Cart = ({navigation, route}) => {
   const {cartItems, addQuantity, minusQuantity, removeItem} = useCart();
-  const {computeTotalPrice, getDeviceId} = useGlobal();
+  const {computeTotalPrice} = useGlobal();
 
   const [isDelete, setIsDelete] = useState(false);
   const [id, setID] = useState();
@@ -35,15 +35,15 @@ const Cart = ({navigation, route}) => {
     navigation.navigate('Scan');
   };
 
-  const ShowNotice = id => {
+  const Agree = id => {
+    removeItem(id);
+    HideAlert();
+  };
+  const DisplayAlert = id => {
     setIsDelete(true);
     setID(id);
   };
-  const Agree = id => {
-    removeItem(id);
-    HideNotice();
-  };
-  const HideNotice = () => {
+  const HideAlert = () => {
     setIsDelete(false);
   };
 
@@ -63,7 +63,7 @@ const Cart = ({navigation, route}) => {
         product: item._id,
         quantity: item.quantity,
       })),
-      deviceId: 'DUB-L22',
+      deviceId: DeviceInfo.getDeviceId(),
       total: computeTotalPrice(cartItems),
     }),
     [cartItems],
@@ -75,8 +75,12 @@ const Cart = ({navigation, route}) => {
 
   useEffect(() => {
     (() => {
-      if (!data && !error) return;
-      if (error) return console.log({error});
+      if (!data && !error) {
+        return;
+      }
+      if (error) {
+        return console.log({error});
+      }
 
       navigation.navigate('Checkout', {
         generatedCode: data?.generatedCode,
@@ -90,7 +94,11 @@ const Cart = ({navigation, route}) => {
       <Head />
 
       {isDelete ? (
-        <DeleteItemNotice onNo={HideNotice} onYes={() => Agree(id)} />
+        <Alert
+          alertMessage={'Are you sure you want to \n\t\t\t delete this item?'}
+          onNo={HideAlert}
+          onYes={() => Agree(id)}
+        />
       ) : null}
 
       {cartItems.length ? (
@@ -98,17 +106,17 @@ const Cart = ({navigation, route}) => {
           <ScrollView
             style={[Styles.containerFlex, Styles.marginBottom10]}
             keyboardShouldPersistTaps="handled">
-            {cartItems.map((data, index) => {
+            {cartItems.map((mapData, index) => {
               return (
                 <View style={Styles.containerUncenter} key={index}>
                   <Item
                     key={index}
-                    itemName={data.name}
-                    itemPrice={data.price}
-                    itemQuantity={data.quantity}
-                    onRemove={() => ShowNotice(data._id)}
-                    onIncrease={() => addQuantity(data._id)}
-                    onDecrease={() => minusQuantity(data._id)}
+                    itemName={mapData.name}
+                    itemPrice={mapData.price}
+                    itemQuantity={mapData.quantity}
+                    onRemove={() => DisplayAlert(mapData._id)}
+                    onIncrease={() => addQuantity(mapData._id)}
+                    onDecrease={() => minusQuantity(mapData._id)}
                   />
                 </View>
               );
@@ -137,7 +145,7 @@ const Cart = ({navigation, route}) => {
             </Pressable>
 
             <Pressable onPress={OpenCamera} style={Styles.floatingButton}>
-              <Image source={add}></Image>
+              <Image source={add} />
             </Pressable>
           </View>
         </View>
@@ -146,13 +154,13 @@ const Cart = ({navigation, route}) => {
       {!cartItems.length ? (
         <View style={Styles.containerCenter}>
           <TouchableOpacity onPress={OpenCamera} style={Styles.contentCenter}>
-            <Image source={addItem}></Image>
+            <Image source={addItem} />
 
             <Text style={[Styles.textNormal, Styles.marginVertical10]}>
               Please add an item
             </Text>
 
-            <Image source={add}></Image>
+            <Image source={add} />
           </TouchableOpacity>
         </View>
       ) : null}

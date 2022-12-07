@@ -13,7 +13,8 @@ const NavActiveBar = () => (
       height: 5,
       backgroundColor: 'white',
       borderRadius: 100,
-    }}></View>
+    }}
+  />
 );
 
 const ItemSummary = ({nav1, onPress1, nav2, onPress2}) => {

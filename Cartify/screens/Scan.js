@@ -13,7 +13,7 @@ const Scan = ({navigation, route}) => {
   const onSuccess = e => {
     navigation.navigate('Cart');
     const data = JSON.parse(e.data);
-    console.log(data);
+    //console.log(data);
     // addItem(data);
     addItem({...data, quantity: 1});
   };

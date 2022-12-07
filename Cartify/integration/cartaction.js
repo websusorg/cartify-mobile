@@ -14,9 +14,9 @@ const useCheckout = () => {
       const {data} = await client.post('/cart/checkout', {...payload});
       setResponse(data);
       return data;
-    } catch (error) {
-      setError(error);
-      throw error;
+    } catch (e) {
+      setError(e);
+      throw e;
     } finally {
       setIsValidating(false);
     }
@@ -32,7 +32,7 @@ const useCheckout = () => {
 
 // change useSWR(`/cart/receipts/DUB-L22`); -> useSWR(`/cart/receipts/${DeviceInfo.getDeviceId()}`);
 const useRecoverReceipt = () => {
-  const {...rest} = useSWR(`/cart/receipts/DUB-L22`);
+  const {...rest} = useSWR(`/cart/receipts/${DeviceInfo.getDeviceId()}`);
   return {...rest}; // get all data
 };
 

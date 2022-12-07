@@ -11,6 +11,7 @@ import {
 
 import ItemSummary from '../components/ItemSummary';
 import PriceSummary from '../components/PriceSummary';
+import Alert from '../components/Alert';
 import Styles from '../styles/styles.js';
 
 import Return from '../assets/return.png';
@@ -18,19 +19,32 @@ import Return from '../assets/return.png';
 import {useCart} from '../contexts/CartContext';
 import {useGlobal} from '../contexts/GlobalContext';
 
-import {useGetCart} from '../integration/cartaction';
-
 const Checkout = ({navigation, route}) => {
   const {cartItems, removeAllItems} = useCart();
-  const {generatedCode, referenceCode} = route.params;
-  const {getReferenceCode, refreshCode, getTimeDate, computeTotalPrice} =
-    useGlobal();
+  const [isCancel, setIsCancel] = useState(false);
 
-  const [lastReferenceCode, setLastReferenceCode] = useState(referenceCode);
-  const [checkoutCode, setCheckoutCode] = useState(refreshCode());
+  const {generatedCode, referenceCode} = route.params;
+  const {computeTotalPrice} = useGlobal();
+
+  // console.log(cartItems);
+
+  // const [lastReferenceCode, setLastReferenceCode] = useState(referenceCode);
+  // const [checkoutCode, setCheckoutCode] = useState(refreshCode());
 
   const ReturnClearCart = () => {
     removeAllItems();
+    navigation.navigate('Cart');
+  };
+
+  const DisplayAlert = () => {
+    setIsCancel(true);
+  };
+
+  const HideAlert = () => {
+    setIsCancel(false);
+  };
+
+  const Agree = () => {
     navigation.navigate('Cart');
   };
 
@@ -43,13 +57,37 @@ const Checkout = ({navigation, route}) => {
 
   return (
     <View style={[Styles.containerUncenter, Styles.bgColorWhite]}>
+      {isCancel ? (
+        <Alert
+          alertMessage={'Do you want to cancel this order?'}
+          onNo={() => HideAlert()}
+          onYes={() => Agree()}
+        />
+      ) : null}
       <View style={Styles.returnButton}>
-        <TouchableOpacity onPress={() => ReturnClearCart()}>
+        <TouchableOpacity onPress={() => DisplayAlert()}>
           <Image source={Return} />
         </TouchableOpacity>
+
+        <Pressable
+          style={[
+            Styles.checkout,
+            Styles.bgColorPurple,
+            {
+              position: 'absolute',
+              height: 30,
+              right: 24,
+              alignItems: 'center',
+            },
+          ]}
+          onPress={() => ReturnClearCart()}>
+          <Text style={{color: '#fff', fontSize: 16, fontWeight: '700'}}>
+            Complete
+          </Text>
+        </Pressable>
       </View>
       <Text
-        style={[Styles.textBig, Styles.textColorPurple, Styles.paddingLeft30]}>
+        style={[Styles.textBig, Styles.textColorWhite, Styles.paddingLeft30]}>
         Checkout
       </Text>
       <ScrollView style={Styles.marginBottom30}>
@@ -68,7 +106,7 @@ const Checkout = ({navigation, route}) => {
         <View style={[Styles.marginHorizontal30, Styles.marginVertical20]}>
           <Text
             style={[Styles.textColorBlack, {fontWeight: '700', fontSize: 16}]}>
-            {referenceCode}
+            {referenceCode.slice(0, 8)}
           </Text>
 
           <Text style={Styles.textColorBlack}>{currTime}</Text>
@@ -117,7 +155,6 @@ const Checkout = ({navigation, route}) => {
             top: 24,
             left: 24,
             borderRadius: 10,
-
             paddingHorizontal: 24,
             paddingVertical: 4,
           }}>
@@ -125,25 +162,15 @@ const Checkout = ({navigation, route}) => {
             {generatedCode}
           </Text>
         </View>
+
         <Pressable
           style={[
             Styles.checkout,
             Styles.bgColorWhite,
-            {position: 'absolute', height: 30, top: 10, right: 24},
+            {position: 'absolute', height: 30, top: 24, right: 24},
           ]}
-          onPress={ReturnClearCart()}>
-          <Text style={{color: '#656ACC', fontSize: 16, fontWeight: '700'}}>
-            {' '}
-            Complete Checkout{' '}
-          </Text>
-        </Pressable>
-        <Pressable
-          style={[
-            Styles.checkout,
-            Styles.bgColorWhite,
-            {position: 'absolute', height: 30, top: 50, right: 40},
-          ]}
-          onPress={() => setCheckoutCode(refreshCode())}>
+          // onPress={() => setCheckoutCode(refreshCode())}
+        >
           <Text style={{color: '#656ACC', fontSize: 16, fontWeight: '700'}}>
             {' '}
             Refresh Code{' '}
